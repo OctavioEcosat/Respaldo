@@ -1,0 +1,183 @@
+* {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    
+    margin: 0px;
+    padding: 0px;
+  }
+
+.dotGreen {
+  height: 45px;
+  width: 45px;
+  background-color: rgb(43, 255, 0);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 5px 3px rgb(43, 255, 0);
+}
+
+.dotRed {
+  height: 45px;
+  width: 45px;
+  background-color: rgb(255, 0, 0);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 5px 3px rgb(255, 0, 0);
+}
+
+.texto-temperatura-cuarto-frio{
+  font-size: 50px;
+  position: absolute;
+  top: 56.5%;
+  left: 30.5%;
+  color: black;
+}
+
+.texto-estado-puerta1{
+  font-size: 21px;
+  font-weight: 350;
+  position: absolute;
+  top: 85%;
+  left: 39%;
+}
+
+.texto-estado-puerta2{
+  font-size: 21px;
+  font-weight: 350;
+  position: absolute;
+  top: 85%;
+  left: 69%;
+}
+
+.texto-temperatura-cuarto-conservacion {
+  font-size: 50px;
+  position: absolute;
+  top: 56.5%;
+  left: 60%;
+  color: black;
+}
+
+.bafar-frigofirico{
+  height: 100%;
+  width: 100%;
+}
+
+@media only screen and (min-width: 2560px) {
+
+  .texto-temperatura-cuarto-frio{
+    font-size: 67px;
+    position: absolute;
+    top: 44%;
+    left: 30.5%;
+    font-weight: 600;
+  }
+  
+  .texto-temperatura-cuarto-conservacion{
+    font-size: 67px;
+    position: absolute;
+    top: 44%;
+    left: 60%;
+    font-weight: 600;
+  }
+  .texto-estado-puerta1{
+    font-size: 30px;
+    position: absolute;
+    top: 66.5%;
+    left: 39%;
+  }
+  
+  .texto-estado-puerta2{
+    font-size: 30px;
+    position: absolute;
+    top: 66.5%;
+    left: 68%;
+  }
+
+}
+/*
+@media only screen and (max-width: 1200px) {
+
+  .texto-temperatura-cuarto-frio{
+    font-size: 33px;
+    position: absolute;
+    top: 50%;
+    left: 30.5%;
+    font-weight: 600;
+  }
+
+  .texto-estado-puerta1{
+    font-size: 20px;
+    font-weight: 400;
+    position: absolute;
+    top: 66%;
+    left: 38.5%;
+  }
+  
+  .texto-estado-puerta2{
+    font-size: 20px;
+    font-weight: 400;
+    position: absolute;
+    top: 66%;
+    left: 68%;
+  }
+
+  .texto-temperatura-cuarto-conservacion{
+    font-size: 33px;
+    position: absolute;
+    top: 44.5%;
+    left: 60.5%;
+    font-weight: 600;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+
+  .texto-temperatura-cuarto-frio{
+    font-size: 25px;
+    position: absolute;
+    top: 38%;
+  
+  }
+
+  .texto-temperatura-cuarto-conservacion{
+    font-size: 28px;
+    left: 60.5%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  /*
+  .texto-temperatura-cuarto-frio{
+    font-size: 25px;
+  }
+
+  .texto-temperatura-cuarto-conservacion{
+    font-size: 25px;
+    left: 60.5%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  /* For mobile phones: */
+  /*
+  .texto-temperatura-cuarto-frio{
+    font-size: 20px;
+  }
+
+  .texto-temperatura-cuarto-conservacion{
+    font-size: 20px;
+    left: 60.5%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  /* For mobile phones: */
+  /*
+  .texto-temperatura-cuarto-frio{
+    font-size: 15px;
+  }
+
+  .texto-temperatura-cuarto-conservacion{
+    font-size: 15px;
+    left: 60.5%;
+  }
+} */

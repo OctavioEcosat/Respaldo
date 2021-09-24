@@ -1,0 +1,387 @@
+#include <SPI.h>
+#include <Wire.h> // libreria comunicacion i2c
+#include <Adafruit_GFX.h>  // libreria generica para la manipulacion de texto en pantalla
+#include <Adafruit_SSD1306.h> 
+#include <WiFi.h>
+
+WiFiServer server(80);
+
+// definir dimensiones de la pantalla
+#define Ancho 128 // ancho pantalla oled
+#define Alto 32 //alto pantalla oled
+
+
+//objeto con parametros de inicializacion
+#define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+Adafruit_SSD1306 display(Ancho,Alto, &Wire, OLED_RESET);
+//  pixeles de ancho, pixeles alto, referencia libreria wire, pin de reset
+
+// interval between the animation frames
+int frame_delay =420;
+// 'frame 1', 80x32px
+const unsigned char frameframe_1 [] PROGMEM = {
+  0x00, 0x00, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0xfe, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x03, 0xff, 0xff, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xff, 0xff, 0xe0, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xff, 0xff, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 
+  0xff, 0xff, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0xff, 0xf0, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x0f, 0xff, 0xff, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0xff, 
+  0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0xff, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x0f, 0xff, 0xff, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xff, 0xff, 0xf0, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xff, 0xff, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 
+  0xff, 0xff, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xff, 0xff, 0x80, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0xfe, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x01, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
+// 'frame2', 80x32px
+const unsigned char frameframe2 [] PROGMEM = {
+  0x00, 0x00, 0x00, 0x00, 0x01, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x81, 0x81, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0xc0, 0x03, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x01, 0x80, 0x01, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0f, 0xf0, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x3f, 0xfe, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 
+  0xff, 0xff, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x21, 0xff, 0xff, 0x84, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x03, 0xff, 0xff, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xff, 0xff, 
+  0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xff, 0xff, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x01, 0xc7, 0xff, 0xff, 0xe3, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0xc7, 0xff, 0xff, 0xe3, 0x80, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xff, 0xff, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 
+  0xff, 0xff, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xff, 0xff, 0xc0, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x23, 0xff, 0xff, 0xc4, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x71, 0xff, 0xff, 
+  0x8e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0xff, 0xff, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x7f, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0xfe, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x3f, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0xfc, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xf8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x0f, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xc0, 0x00, 0x00, 0x00, 0x00
+};
+
+// Array of all bitmaps for convenience. (Total bytes used to store images in PROGMEM = 672)
+const int frameallArray_LEN = 2;
+const unsigned char* frameallArray[2] = {
+  frameframe2,
+  frameframe_1
+};
+
+
+
+const char* ssid = "Ecosat";           
+const char* password = "ECOSAT2021"; 
+
+String header; // Variable para guardar el HTTP request
+
+String estadoSalida = "off";
+
+const int OUT = 2; // gpio 
+
+const int btn = 19; // boton 
+int NAcounts=0;
+
+int btnstate = 0; // variable para leer el estado del boton
+bool btnlaststate,brnlaststateonline,banderaContador;
+int contador = 0;
+
+//------------------------CODIGO HTML------------------------------
+String pagina = "<!DOCTYPE html>"
+"<html>"
+"<head>"
+"<meta charset='utf-8' />"
+"<title> ESP32 GPIO web</title>"
+"</head>"
+"<body>"
+"<center>"
+"<h1>control web GPIO ESP32</h1>"
+"<p><a href='/on'><button style='height:50px;width:100px'>ON</button></a></p>"
+"<p><a href='/off'><button style='height:50px;width:100px'>OFF</button></a></p>"
+"</center>"
+"</body>"
+"</html>";
+//---------------------------SETUP--------------------------------
+
+
+void setup(){
+
+//   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+//  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+//    Serial.println(F("SSD1306 allocation failed"));
+//    for(;;); // Don't proceed, loop forever
+//  }
+  Wire.begin();// inicia comunicacion pur bus i2c
+  Serial.begin(115200);
+  display.begin(SSD1306_SWITCHCAPVCC, 0X3C);
+  display.clearDisplay();
+  // constante definida dentro de la libreria, para establecer valores especificos de alimentacion, direccion i2c de la pantalla
+
+  
+  pinMode(OUT, OUTPUT); 
+  digitalWrite(OUT, LOW);
+  pinMode(btn, INPUT_PULLUP);
+
+  redwifi();
+  btnlaststate = digitalRead(btn);
+  brnlaststateonline = false;
+  banderaContador = false;
+  
+}
+//---------------------------SETUP--------------------------------
+
+void ipdisplay(){
+      display.clearDisplay();
+      display.setCursor(0,0);
+      display.println("Conectado a:");
+      display.print(WiFi.SSID());
+      display.println("IP address;");
+      display.println(WiFi.localIP());
+      display.println("MAC address;");
+      display.println(WiFi.macAddress());
+      display.println(WiFi.localIP());
+      display.display();
+}
+
+void controlbtn(){
+  
+   // read the state of the pushbutton value:
+  btnstate = digitalRead(btn);
+  // control LED according to the state of button
+  if(btnstate == LOW)   {  
+    if (btnlaststate != btnstate){// If button is pressing
+      digitalWrite(OUT, HIGH); // turn on LED
+                    // Diplay Animation frame 1
+      display.clearDisplay();
+      display.drawBitmap(30,0,frameframe2 , 80, 32, 1);
+      display.display();
+      btnlaststate = btnstate;
+
+    } 
+  }else {  
+    if(btnlaststate != btnstate){ // otherwise, button is not pressing
+      digitalWrite(OUT, LOW);  // turn off LED
+                                // Frame2
+      display.clearDisplay();
+//      display.drawBitmap(30,0,frameframe_1, 80, 32, 1);
+//      display.display();
+      ipdisplay();
+      btnlaststate = btnstate;
+    }
+
+  }
+}
+
+void redwifi(){
+
+  // Conexión WIFI
+  
+  WiFi.begin(ssid, password);
+   display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.setTextSize(1);
+  display.print("CONECTANDO");
+  display.display();
+  while (WiFi.status() != WL_CONNECTED && NAcounts < 50) { 
+    delay(500);
+    Serial.print(".");
+    NAcounts ++;
+     display.print(".");
+     display.display();
+  }
+  if (WiFi.status() != WL_CONNECTED){
+    Serial.println("reseteando");
+    ESP.restart();
+  }
+  else{
+
+   Serial.println("WiFi conectado");
+      Serial.print("Conectado a:");
+      Serial.print(WiFi.SSID());
+      Serial.println("IP address;");
+      Serial.println(WiFi.localIP());
+      Serial.println("MAC address;\t");
+      Serial.println(WiFi.macAddress());
+      Serial.println(WiFi.localIP());
+      
+      ///---- desplegamos informacion en el display
+      display.clearDisplay();
+      display.setCursor(0,0);
+      display.print("Conectado: ");
+      display.println(WiFi.SSID());
+      display.print("IP: ");
+      display.println(WiFi.localIP());
+      display.print("MAC:");
+      display.println(WiFi.macAddress());
+      display.display();
+      
+      server.begin(); // iniciamos el servidor
+
+  
+}
+}
+  
+
+//----------------------------LOOP----------------------------------
+
+void loop(){
+  controlbtn();
+  
+  WiFiClient client = server.available();   // Escucha a los clientes entrantes
+
+  if (client) {                             // Si se conecta un nuevo cliente
+    Serial.println("New Client.");          // 
+    String currentLine = "";                //
+    while (client.connected()) {            // loop mientras el cliente está conectado
+      if (client.available()) {             // si hay bytes para leer desde el cliente
+        char c = client.read();             // lee un byte
+        Serial.write(c);                    // imprime ese byte en el monitor serial
+        header += c;
+        if (c == '\n') {                    // si el byte es un caracter de salto de linea
+          // si la nueva linea está en blanco significa que es el fin del 
+          // HTTP request del cliente, entonces respondemos:
+          
+          if (currentLine.length() == 0) {
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
+            
+            // enciende y apaga el GPIO
+
+            if (header.indexOf("GET /on") >= 0 ) {
+              if(!brnlaststateonline){
+                brnlaststateonline = true;
+                display.clearDisplay();
+                display.setCursor(0,0);
+                display.println("GPIO ON");
+                display.display();
+                Serial.println("GPIO on");  
+                estadoSalida = "on";
+                digitalWrite(OUT, HIGH);
+                        // Diplay Animation frame 1
+                display.clearDisplay();
+                display.drawBitmap(30,0,frameframe2 , 80, 32, 1);
+                display.display();
+                banderaContador = true;
+              }                
+            } else if (header.indexOf("GET /off") >= 0 ) {
+              if(brnlaststateonline){
+                brnlaststateonline = false;
+                display.clearDisplay();
+                display.setCursor(0,0);
+                display.println("GPIO OFF");
+                Serial.println("GPIO off");
+                estadoSalida = "off"; 
+                digitalWrite(OUT, LOW);
+                            // Frame2
+                display.clearDisplay();
+                display.drawBitmap(30,0,frameframe_1 , 80, 32, 1);
+                display.display();
+                banderaContador = true;
+                
+              } 
+             
+            }
+            
+            // Muestra la página web
+            client.println(pagina);
+            
+            // la respuesta HTTP temina con una linea en blanco
+            client.println();
+            break;
+          } else { // si tenemos una nueva linea limpiamos currentLine
+            currentLine = "";
+          }
+        } else if (c != '\r') {  // si C es distinto al caracter de retorno de carro
+          currentLine += c;      // lo agrega al final de currentLine
+        }
+        
+      }
+    }
+    // Limpiamos la variable header
+    header = "";
+    // Cerramos la conexión
+   
+    client.stop();
+    Serial.println("Client disconnected.");
+    Serial.println("");
+
+  }
+  if(banderaContador){
+    contador = 0;
+    banderaContador = false;
+    delay(1000);
+    ipdisplay();
+  }
+}
+
+//..................................CODIGO SIN OLED............................................
+
+
+  WiFiClient client = client.connect(serverName, 80);   // Escucha a los clientes entrantes
+
+  if (client) {                             // Si se conecta un nuevo cliente
+    Serial.println("New Client.");          // 
+    String currentLine = "";                //
+    while (client.connected()) {            // loop mientras el cliente está conectado
+      if (client.available()) {             // si hay bytes para leer desde el cliente
+        char c = client.read();             // lee un byte
+        Serial.write(c);                    // imprime ese byte en el monitor serial
+        header += c;
+        if (c == '\n') {                    // si el byte es un caracter de salto de linea
+          // si la nueva linea está en blanco significa que es el fin del 
+          // HTTP request del cliente, entonces respondemos:
+          
+          if (currentLine.length() == 0) {
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-type:text/html");
+            client.println("Connection: close");
+            client.println();
+            
+            // enciende y apaga el GPIO
+
+            if (header.indexOf("GET /on") >= 0 ) {
+              if(!brnlaststateonline){
+                brnlaststateonline = true;
+                Serial.println("GPIO on");  
+                digitalWrite(OUT, HIGH);
+              }                
+            } else if (header.indexOf("GET /off") >= 0 ) {
+              if(brnlaststateonline){
+                brnlaststateonline = false;
+                digitalWrite(OUT, LOW);
+              } 
+             
+            }
+            
+            // Muestra la página web
+            client.println(pagina);
+            
+            // la respuesta HTTP temina con una linea en blanco
+            client.println();
+            break;
+          } else { // si tenemos una nueva linea limpiamos currentLine
+            currentLine = "";
+          }
+        } else if (c != '\r') {  // si C es distinto al caracter de retorno de carro
+          currentLine += c;      // lo agrega al final de currentLine
+        }
+        
+      }
+    }
+    // Limpiamos la variable header
+    header = "";
+    // Cerramos la conexión
+   
+    client.stop();
+    Serial.println("Client disconnected.");
+    Serial.println("");
+
+  }

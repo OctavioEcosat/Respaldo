@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Temper</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+    crossorigin="anonymous">
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/base.css">
+    <script src="./js/app.js"></script>
+</head>
+<body style="background-color: blueviolet;">
+    <!-- START -->
+
+    <p><a href='/test/on'><button style='height:50px;width:100px'>ON</button></a></p>
+    <p><a href='/test/off'><button style='height:50px;width:100px'>OFF</button></a></p>
+    <div id="door_values1" class="texto-estado-puerta1">Sensor 1</div>
+    <div id="door_values2" class="texto-estado-puerta2">Sensor 2</div>
+    <div id="sensor_values1" class="texto-temperatura-cuarto-conservacion">Sensores 1</div>
+    <div id="sensor_values2" class="texto-temperatura-cuarto-frio">Sensores 2</div>
+
+    <img class="bafar-frigofirico" src="./Images/Bafar-frigofirico.jpg">
+
+    <!-- END -->
+    © 2010-<?php 
+    $date = localtime(TRUE);
+    echo $date[tm_year];
+    ?>
+</body>
+</html>
